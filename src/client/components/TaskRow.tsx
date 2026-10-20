@@ -1,8 +1,11 @@
 import { useState, type ChangeEvent } from "react";
 import {
+  TASK_PRIORITIES,
+  TASK_PRIORITY_LABELS,
   TASK_STATUSES,
   TASK_STATUS_LABELS,
   type Task,
+  type TaskPriority,
   type TaskStatus,
   type TaskUpdate,
 } from "../../shared/types";
@@ -50,6 +53,16 @@ export function TaskRow({ task, onUpdate }: TaskRowProps) {
     try {
       await onUpdate(task.id, {
         status: event.target.value as TaskStatus,
+      });
+    } catch {
+      // The board-level banner reports the API error.
+    }
+  }
+
+  async function updatePriority(event: ChangeEvent<HTMLSelectElement>) {
+    try {
+      await onUpdate(task.id, {
+        priority: event.target.value as TaskPriority,
       });
     } catch {
       // The board-level banner reports the API error.
@@ -117,6 +130,21 @@ export function TaskRow({ task, onUpdate }: TaskRowProps) {
             {TASK_STATUSES.map((status) => (
               <option key={status} value={status}>
                 {TASK_STATUS_LABELS[status]}
+              </option>
+            ))}
+          </select>
+        </label>
+
+        <label className="field field-compact">
+          <span>Priority</span>
+          <select
+            aria-label={`Priority for ${task.title}`}
+            value={task.priority}
+            onChange={(event) => void updatePriority(event)}
+          >
+            {TASK_PRIORITIES.map((priority) => (
+              <option key={priority} value={priority}>
+                {TASK_PRIORITY_LABELS[priority]}
               </option>
             ))}
           </select>
