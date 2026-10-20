@@ -5,6 +5,7 @@ const defaultTask: Task = {
   title: "Test task",
   description: "A task used in automated tests.",
   status: "todo",
+  priority: "medium",
   updatedAt: "2026-10-01T12:00:00.000Z",
 };
 
@@ -15,5 +16,5 @@ export function makeTask(overrides: Partial<Task> = {}): Task {
 export function makeFilters(
   overrides: Partial<TaskFilters> = {},
 ): TaskFilters {
-  return { query: "", status: "all", ...overrides };
+  return { query: "", status: "all", priority: "all", ...overrides };
 }

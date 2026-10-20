@@ -8,14 +8,16 @@ export function filterTasks(
   tasks: readonly Task[],
   filters: TaskFilters,
 ): Task[] {
+  const { status, priority } = filters;
   const query = filters.query.trim().toLowerCase();
 
   return tasks.filter((task) => {
     const matchesQuery =
       query.length === 0 || task.title.toLowerCase().includes(query);
-    const matchesStatus =
-      filters.status === "all" || task.status === filters.status;
+    const matchesStatus = status === "all" || task.status === status;
+    const matchesPriority =
+      priority === "all" || task.priority === priority;
 
-    return matchesQuery && matchesStatus;
+    return matchesQuery && matchesStatus && matchesPriority;
   });
 }

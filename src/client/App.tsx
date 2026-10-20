@@ -10,6 +10,7 @@ export default function App() {
   const [filters, setFilters] = useState<TaskFilters>({
     query: "",
     status: "all",
+    priority: "all",
   });
   const [isLoading, setIsLoading] = useState(true);
   const [loadError, setLoadError] = useState<string | null>(null);

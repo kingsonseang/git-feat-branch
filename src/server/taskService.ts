@@ -1,8 +1,10 @@
 import { filterTasks } from "../shared/filterTasks";
 import {
+  isTaskPriority,
   isTaskStatus,
   type Task,
   type TaskFilters,
+  type TaskPriorityFilter,
   type TaskUpdate,
 } from "../shared/types";
 
@@ -45,6 +47,16 @@ export function updateTask(
     throw new TaskNotFoundError(id);
   }
 
+  if (patch.priority !== undefined) {
+    if (!isTaskPriority(patch.priority)) {
+      throw new InvalidTaskError(
+        "Priority must be one of: low, medium, high.",
+      );
+    }
+
+    task.priority = patch.priority;
+  }
+
   if (patch.title !== undefined) {
     task.title = patch.title;
   }
@@ -70,13 +82,22 @@ export function parseTaskFilters(
     typeof raw.status === "string" && raw.status.length > 0
       ? raw.status
       : "all";
+  const priority =
+    typeof raw.priority === "string" && raw.priority.length > 0
+      ? raw.priority
+      : "all";
 
   if (status !== "all" && !isTaskStatus(status)) {
     throw new InvalidFilterError(`Unknown status "${status}".`);
   }
 
+  if (priority !== "all" && !isTaskPriority(priority)) {
+    throw new InvalidFilterError(`Unknown priority "${priority}".`);
+  }
+
   return {
     query: typeof raw.q === "string" ? raw.q : "",
     status,
+    priority: priority as TaskPriorityFilter,
   };
 }

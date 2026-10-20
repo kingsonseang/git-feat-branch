@@ -8,6 +8,7 @@ export function createSeedTasks(): Task[] {
       description:
         "Document drop-off points in the checklist for new hires.",
       status: "todo",
+      priority: "high",
       updatedAt: "2026-10-02T09:15:00.000Z",
     },
     {
@@ -16,6 +17,7 @@ export function createSeedTasks(): Task[] {
       description:
         "Outline milestones for the onboarding checklist and hiring plan.",
       status: "in_progress",
+      priority: "high",
       updatedAt: "2026-10-03T14:40:00.000Z",
     },
     {
@@ -23,6 +25,7 @@ export function createSeedTasks(): Task[] {
       title: "Draft release notes",
       description: "Summarize the 0.2 release for customers.",
       status: "done",
+      priority: "low",
       updatedAt: "2026-10-05T11:05:00.000Z",
     },
     {
@@ -30,6 +33,7 @@ export function createSeedTasks(): Task[] {
       title: "Fix empty state layout",
       description: "Align the placeholder illustration on small screens.",
       status: "todo",
+      priority: "medium",
       updatedAt: "2026-10-07T16:20:00.000Z",
     },
     {
@@ -37,6 +41,7 @@ export function createSeedTasks(): Task[] {
       title: "Review analytics dashboard",
       description: "Validate weekly active metrics with product.",
       status: "in_progress",
+      priority: "medium",
       updatedAt: "2026-10-09T08:30:00.000Z",
     },
     {
@@ -44,6 +49,7 @@ export function createSeedTasks(): Task[] {
       title: "Archive legacy reports",
       description: "Move old exports to cold storage and verify access.",
       status: "done",
+      priority: "low",
       updatedAt: "2026-10-10T13:00:00.000Z",
     },
   ];
