@@ -6,6 +6,8 @@ import {
   type TaskUpdate,
 } from "../shared/types";
 
+const MAX_TITLE_LENGTH = 120;
+
 export class TaskNotFoundError extends Error {
   constructor(id: string) {
     super(`Task "${id}" was not found.`);
@@ -27,6 +29,26 @@ export class InvalidFilterError extends Error {
   }
 }
 
+function normalizeTitle(value: unknown): string {
+  if (typeof value !== "string") {
+    throw new InvalidTaskError("Title must be text.");
+  }
+
+  const title = value.trim();
+
+  if (title.length === 0) {
+    throw new InvalidTaskError("Title must not be empty.");
+  }
+
+  if (title.length > MAX_TITLE_LENGTH) {
+    throw new InvalidTaskError(
+      `Title must be ${MAX_TITLE_LENGTH} characters or fewer.`,
+    );
+  }
+
+  return title;
+}
+
 export function listTasks(
   tasks: readonly Task[],
   filters: TaskFilters,
@@ -45,17 +67,22 @@ export function updateTask(
     throw new TaskNotFoundError(id);
   }
 
-  if (patch.title !== undefined) {
-    task.title = patch.title;
+  // Validate every supplied field before mutating the task so a bad patch
+  // cannot leave a partially applied update behind.
+  const nextTitle =
+    patch.title !== undefined ? normalizeTitle(patch.title) : undefined;
+
+  if (patch.status !== undefined && !isTaskStatus(patch.status)) {
+    throw new InvalidTaskError(
+      "Status must be one of: todo, in_progress, done.",
+    );
+  }
+
+  if (nextTitle !== undefined) {
+    task.title = nextTitle;
   }
 
   if (patch.status !== undefined) {
-    if (!isTaskStatus(patch.status)) {
-      throw new InvalidTaskError(
-        "Status must be one of: todo, in_progress, done.",
-      );
-    }
-
     task.status = patch.status;
   }
 
