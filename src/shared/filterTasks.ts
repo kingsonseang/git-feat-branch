@@ -8,11 +8,15 @@ export function filterTasks(
   tasks: readonly Task[],
   filters: TaskFilters,
 ): Task[] {
-  const query = filters.query.trim().toLowerCase();
+  const terms = filters.query
+    .trim()
+    .toLowerCase()
+    .split(/\s+/)
+    .filter((term) => term.length > 0);
 
   return tasks.filter((task) => {
-    const matchesQuery =
-      query.length === 0 || task.title.toLowerCase().includes(query);
+    const searchable = `${task.title} ${task.description}`.toLowerCase();
+    const matchesQuery = terms.every((term) => searchable.includes(term));
     const matchesStatus =
       filters.status === "all" || task.status === filters.status;
 
